@@ -17,6 +17,8 @@ namespace SpriteTool
 
         public static void SliceWithSecondaryTextures(Texture2D inputTex, int sliceWidth, int sliceHeight)
         {
+            if(inputTex == null) return;
+            
             string path = AssetDatabase.GetAssetPath(inputTex);
 
             TextureImporter importer =
@@ -24,6 +26,7 @@ namespace SpriteTool
 
             importer.isReadable = true;
             importer.spriteImportMode = SpriteImportMode.Multiple;
+            importer.spritePixelsPerUnit = sliceWidth;
 
             List<SpriteMetaData> newData = new List<SpriteMetaData>();
 
@@ -54,6 +57,8 @@ namespace SpriteTool
 
         public static void SetToPixelArt(Texture2D inputTex)
         {
+            if(inputTex == null) return;
+            
             TextureImporter importer =
                 (TextureImporter) TextureImporter.GetAtPath(AssetDatabase.GetAssetPath(inputTex));
 
