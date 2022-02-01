@@ -14,6 +14,36 @@ namespace SpriteTool
         private static readonly string EMISSION_SECONDARY_TEXTURE_NAME = "_Emission";
         private static readonly string NORMAL_MAP_SUFFIX = "_n";
         private static readonly string NORMAL_MAP_SECONDARY_TEXTURE_NAME= "_NormalMap";
+
+        public static void SetToPixelArt(Texture2D inputTex)
+        {
+            TextureImporter importer =
+                (TextureImporter) TextureImporter.GetAtPath(AssetDatabase.GetAssetPath(inputTex));
+
+            importer.filterMode = FilterMode.Point;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+
+            int biggerBorder = Mathf.Max(inputTex.width, inputTex.height);
+            int power = 1;
+            while (power < biggerBorder)
+            {
+                power *= 2;
+            }
+
+            if (power > 16394)
+                power = 16394;
+            
+            importer.maxTextureSize = power;
+
+            foreach (var secondarySpriteTexture in importer.secondarySpriteTextures)
+            {
+                Texture2D sec = secondarySpriteTexture.texture;
+                SetToPixelArt(sec);
+            }
+            
+            EditorUtility.SetDirty(importer);
+            importer.SaveAndReimport();
+        } 
         
         public static void SetSecondaryTextures(Texture2D inputTex)
         {

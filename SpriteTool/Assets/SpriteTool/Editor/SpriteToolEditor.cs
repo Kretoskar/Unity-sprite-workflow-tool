@@ -8,7 +8,8 @@ namespace SpriteTool
 {
     public class SpriteToolEditor : EditorWindow
     {
-        Texture2D texture;
+        private Texture2D texture;
+        private bool pixelArt;
         
         [MenuItem("Window/Sprite Tool")]
         public static void ShowWindow()
@@ -29,10 +30,17 @@ namespace SpriteTool
                 typeof(Texture2D));
 
             GUILayout.Space(60);
+
+            pixelArt = EditorGUILayout.Toggle("Pixel Art", pixelArt);
             
             if (GUILayout.Button("Process"))
             {
                 SpriteToolBehaviour.SetSecondaryTextures(texture);
+
+                if (pixelArt)
+                {
+                    SpriteToolBehaviour.SetToPixelArt(texture);
+                }
             }
         }
     }
