@@ -15,6 +15,43 @@ namespace SpriteTool
         private static readonly string NORMAL_MAP_SUFFIX = "_n";
         private static readonly string NORMAL_MAP_SECONDARY_TEXTURE_NAME= "_NormalMap";
 
+        public static void SliceWithSecondaryTextures(Texture2D inputTex, int sliceWidth, int sliceHeight)
+        {
+            string path = AssetDatabase.GetAssetPath(inputTex);
+
+            TextureImporter importer =
+                    (TextureImporter) TextureImporter.GetAtPath(path);
+
+            importer.isReadable = true;
+            importer.spriteImportMode = SpriteImportMode.Multiple;
+
+            List<SpriteMetaData> newData = new List<SpriteMetaData>();
+
+            for (int i = 0; i < inputTex.width; i += sliceWidth)
+            {
+                for (int j = inputTex.height; j > 0; j -= sliceHeight)
+                {
+                    SpriteMetaData smd = new SpriteMetaData();
+                    smd.pivot = new Vector2(0.5f, 0.5f);
+                    smd.alignment = 9;
+                    smd.name = (inputTex.height - j) / sliceHeight + " , " + i / sliceWidth;
+                    smd.rect = new Rect(i, j - sliceHeight, sliceWidth, sliceHeight);
+                    
+                    newData.Add(smd);
+                }
+            }
+
+            foreach (var secondarySpriteTexture in importer.secondarySpriteTextures)
+            {
+                Texture2D sec = secondarySpriteTexture.texture;
+                SliceWithSecondaryTextures(sec, sliceWidth, sliceHeight);
+            }
+
+            
+            importer.spritesheet = newData.ToArray();
+            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+        }
+
         public static void SetToPixelArt(Texture2D inputTex)
         {
             TextureImporter importer =
