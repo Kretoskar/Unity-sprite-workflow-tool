@@ -10,7 +10,7 @@ namespace SpriteTool
     public class SpriteToolEditor : EditorWindow
     {
         private Texture2D texture;
-        private bool pixelArt;
+        private ImportSettingsPreset importSettingsPreset;
         private bool slice;
         private int sliceWidth = 128;
         private int sliceHeight = 128;
@@ -28,14 +28,20 @@ namespace SpriteTool
 
         private void OnGUI()
         {
-            texture = (Texture2D)EditorGUI.ObjectField(new Rect(6, 6, 200, 200),
+            Texture2D LogoTex = (Texture2D)Resources.Load("spriteTool"); //don't put png
+            GUILayout.Label(LogoTex);
+
+            texture = (Texture2D)EditorGUI.ObjectField(new Rect(6, 106, 200, 200),
                 "Add a Texture:",
                 texture,
                 typeof(Texture2D));
 
             GUILayout.Space(60);
 
-            pixelArt = EditorGUILayout.Toggle("Pixel Art", pixelArt);
+            if(texture == null) return;
+
+            importSettingsPreset =
+                (ImportSettingsPreset) EditorGUILayout.EnumPopup("Import settings", importSettingsPreset);
             slice = EditorGUILayout.Toggle("Slice", slice);
             if (slice)
             {
@@ -47,7 +53,7 @@ namespace SpriteTool
             {
                 SpriteToolBehaviour.SetSecondaryTextures(texture);
 
-                if (pixelArt)
+                if (importSettingsPreset == ImportSettingsPreset.PixelArt)
                 {
                     SpriteToolBehaviour.SetToPixelArt(texture);
                 }

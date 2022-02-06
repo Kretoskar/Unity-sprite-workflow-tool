@@ -130,4 +130,10 @@ namespace SpriteTool
             return GUIDs[0];
         }
     }
+    
+    public enum ImportSettingsPreset
+    {
+        PixelArt, 
+        Custom
+    }
 }
