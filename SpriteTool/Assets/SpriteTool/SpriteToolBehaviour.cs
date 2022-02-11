@@ -57,6 +57,11 @@ namespace SpriteTool
 
         public static void SetToPixelArt(Texture2D inputTex)
         {
+            SetImportSettings(inputTex, FilterMode.Point, TextureImporterCompression.Uncompressed);
+        }
+
+        public static void SetImportSettings(Texture2D inputTex, FilterMode filterMode, TextureImporterCompression compression)
+        {
             if(inputTex == null) return;
             
             TextureImporter importer =
@@ -80,12 +85,12 @@ namespace SpriteTool
             foreach (var secondarySpriteTexture in importer.secondarySpriteTextures)
             {
                 Texture2D sec = secondarySpriteTexture.texture;
-                SetToPixelArt(sec);
+                SetImportSettings(sec, filterMode, compression);
             }
             
             EditorUtility.SetDirty(importer);
             importer.SaveAndReimport();
-        } 
+        }
         
         public static void SetSecondaryTextures(Texture2D inputTex)
         {
