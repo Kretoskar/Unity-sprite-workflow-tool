@@ -6,4 +6,4 @@ Functionalities:
 * Find emission and normal maps by suffixes (_e, _n)
 * Slice multiple sprites
 
-![This is an image](https://imgur.com/V6TURo0)
+![This is an image](https://i.imgur.com/V6TURo0.png)
